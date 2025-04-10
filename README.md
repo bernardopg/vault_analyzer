@@ -54,7 +54,7 @@ O aplicativo é projetado para funcionar inteiramente no navegador, sem enviar s
 
 ## 🧩 Estrutura do Projeto
 
-```
+```bash
 my-vault-analyzer/
 ├── src/
 │   ├── app/              # Rotas e páginas da aplicação
@@ -111,17 +111,9 @@ npm run dev
 - `npm run test` - Executar testes
 - `npm run test:coverage` - Executar testes com cobertura
 
-## 📝 Roadmap
-
-- [ ] Exportação de relatórios em PDF e XLSX
-- [ ] Análise de histórico de senhas (comparações entre exportações)
-- [ ] Sugestões personalizadas para melhorar a segurança
-- [ ] Modo escuro/claro
-- [ ] Interface em múltiplos idiomas
-
 ## 📄 Licença
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para mais detalhes.
+Este projeto está licenciado sob a [Licença MIT](LICENSE) - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 🙏 Agradecimentos
 
