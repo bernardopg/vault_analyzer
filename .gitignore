@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/.nyc_output
+*.lcov
 
 # next.js
 /.next/
@@ -19,25 +21,63 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
 *.pem
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+.idea
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+lerna-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
 
 # vercel
 .vercel
+
+# turbo
+.turbo
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
+# sensitive data
 bitwarden-export.json
+*credentials*.json
+*secrets*.json
+*password*.json
+*auth*.json
+bitwarden-export.json
+
+# OS generated files
+.directory
+.fuse_hidden*
+.Trash-*
+.nfs*
