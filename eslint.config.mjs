@@ -1,3 +1,4 @@
+// Mover este arquivo para uma nova pasta chamada 'config' para melhor organização.
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";

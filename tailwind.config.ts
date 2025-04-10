@@ -1,8 +1,9 @@
+// Mover este arquivo para uma nova pasta chamada 'config' para melhor organização.
 import type { Config } from "tailwindcss";
 import animatePlugin from "tailwindcss-animate"; // Import animate plugin
 
 const config = {
-  darkMode: ["class"],
+  darkMode: "class", // Alterado de ["class"] para "class"
   content: [
     // Paths already configured in postcss.config.js via @tailwindcss/postcss bridge
     // './pages/**/*.{ts,tsx}', // Not needed if using bridge with default paths

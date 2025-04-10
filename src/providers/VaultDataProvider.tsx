@@ -101,6 +101,10 @@ export const VaultDataProvider: React.FC<VaultDataProviderProps> = ({
 
           const { results, summary } = analyzeVaultDataSync(vaultData);
 
+          // Adicionando logs detalhados após a análise síncrona
+          console.log("Resultados da análise síncrona:", results);
+          console.log("Resumo da análise síncrona:", summary);
+
           // Limpa o intervalo após a análise síncrona
           clearInterval(progressInterval);
 
@@ -140,6 +144,11 @@ export const VaultDataProvider: React.FC<VaultDataProviderProps> = ({
 
           analyzePasswordLeaks(results)
             .then(({ updatedItems, leakedCount }) => {
+              console.log(
+                "Resultados atualizados após análise de vazamentos:",
+                updatedItems
+              );
+              console.log("Contagem de senhas vazadas:", leakedCount);
               // Clear the progress interval
               clearInterval(leakProgressInterval);
 
@@ -171,6 +180,7 @@ export const VaultDataProvider: React.FC<VaultDataProviderProps> = ({
               setAnalysisStage(AnalysisStage.COMPLETE);
             })
             .catch((err) => {
+              console.error("Erro durante a análise de vazamentos:", err);
               // Clear the progress interval
               clearInterval(leakProgressInterval);
 

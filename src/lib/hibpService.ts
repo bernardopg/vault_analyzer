@@ -1,4 +1,5 @@
-import * as sha1 from "js-sha1";
+// Ajustando para usar a sintaxe padrão do ESModule
+import sha1 from "js-sha1";
 import axios from "axios";
 
 // Função para verificar se uma senha foi vazada usando a API Have I Been Pwned (HIBP)
@@ -12,12 +13,11 @@ export async function checkPasswordLeak(password: string): Promise<number> {
     const prefix = hash.substring(0, 5);
     const suffix = hash.substring(5);
 
-    // Chama a API HIBP com apenas o prefixo do hash
+    // Removendo o cabeçalho "User-Agent" da requisição para evitar erros em navegadores modernos
     const response = await axios.get(
       `https://api.pwnedpasswords.com/range/${prefix}`,
       {
         headers: {
-          "User-Agent": "MyVaultAnalyzer-App",
           "Add-Padding": "true", // Usa padding para proteger contra timing attacks
         },
       }

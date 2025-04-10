@@ -11,11 +11,19 @@ import {
   CheckCircle,
   XCircle,
   Replace,
+  FileUp,
 } from "lucide-react";
 import { toast } from "sonner";
 import { AnalysisProgress } from "./AnalysisProgress";
+import { cn } from "@/lib/utils";
 
-export const FileUploader: React.FC = () => {
+type FileUploaderProps = {
+  variant?: "default" | "header";
+};
+
+export const FileUploader: React.FC<FileUploaderProps> = ({
+  variant = "default",
+}) => {
   // Destructure only what's needed for this component
   const {
     loadVaultFile,
@@ -66,8 +74,61 @@ export const FileUploader: React.FC = () => {
     // Toast for clearing is handled within clearVaultData in the provider
   }, [clearVaultData]); // clearVaultData is stable
 
+  // Renderizar botão de acordo com a variante
+  const renderUploadButton = () => {
+    if (variant === "header") {
+      return (
+        <Button
+          onClick={handleButtonClick}
+          disabled={isDisabled}
+          variant="outline"
+          size="sm"
+          className="h-9"
+          aria-label="Carregar arquivo JSON do cofre Bitwarden"
+          data-testid="upload-button-header"
+        >
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <FileUp className="mr-2 h-4 w-4" />
+          )}
+          {isLoading ? "Carregando..." : "Importar Cofre"}
+        </Button>
+      );
+    }
+
+    return (
+      <Button
+        onClick={handleButtonClick}
+        disabled={isDisabled}
+        className="w-full max-w-full sm:max-w-xs"
+        aria-label="Carregar arquivo JSON do cofre Bitwarden"
+        data-testid="upload-button"
+      >
+        {isLoading ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Upload className="mr-2 h-4 w-4" />
+        )}
+        {isLoading
+          ? isAnalyzing
+            ? "Analisando..."
+            : "Carregando..."
+          : "Carregar Cofre (.json)"}
+      </Button>
+    );
+  };
+
+  // Define se deve mostrar componentes extras como progresso e mensagens
+  const showExtras = variant === "default";
+
   return (
-    <div className="flex flex-col items-center space-y-2 w-full max-w-full">
+    <div
+      className={cn(
+        "flex flex-col items-center space-y-2",
+        variant === "default" ? "w-full max-w-full" : ""
+      )}
+    >
       {/* Hidden file input element */}
       <input
         type="file"
@@ -80,94 +141,73 @@ export const FileUploader: React.FC = () => {
       />
 
       {/* Show Upload Button OR Status/Clear Button */}
-      {!vaultData &&
-        !error && ( // Show upload button only if no data and no error
-          <Button
-            onClick={handleButtonClick}
-            disabled={isDisabled} // Disable while loading/analyzing
-            className="w-full max-w-full sm:max-w-xs"
-            aria-label="Carregar arquivo JSON do cofre Bitwarden"
-            data-testid="upload-button"
-          >
-            {isLoading ? ( // Show specific loading/analyzing state
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Upload className="mr-2 h-4 w-4" />
-            )}
-            {isLoading
-              ? isAnalyzing
-                ? "Analisando..."
-                : "Carregando..."
-              : "Carregar Cofre (.json)"}
-          </Button>
-        )}
+      {!vaultData && !error && renderUploadButton()}
 
       {/* Componente de Progresso da Análise */}
-      <div className="w-full flex justify-center">
-        <AnalysisProgress />
-      </div>
+      {showExtras && (
+        <div className="w-full flex justify-center">
+          <AnalysisProgress />
+        </div>
+      )}
 
       {/* Display Error Message */}
-      {error &&
-        !isDisabled && ( // Show error only if not loading/analyzing
-          <div
-            className="text-destructive text-sm flex items-start text-left space-x-1 p-2 border border-destructive rounded-md bg-destructive/10 w-full max-w-full sm:max-w-xs"
-            role="alert"
-            data-testid="error-message"
+      {error && !isDisabled && showExtras && (
+        <div
+          className="text-destructive text-sm flex items-start text-left space-x-1 p-2 border border-destructive rounded-md bg-destructive/10 w-full max-w-full sm:max-w-xs"
+          role="alert"
+          data-testid="error-message"
+        >
+          <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+          <span className="line-clamp-2">{error}</span>
+          {/* Optionally add a retry button here */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleButtonClick}
+            className="ml-auto text-destructive hover:bg-destructive/20 h-auto p-1 flex-shrink-0"
+            title="Tentar novamente"
+            data-testid="retry-button"
           >
-            <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-            <span className="line-clamp-2">{error}</span>
-            {/* Optionally add a retry button here */}
+            <span className="sr-only">Tentar Novamente</span>
+            <Replace className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+
+      {/* Display Success + Clear Button */}
+      {vaultData && !error && !isDisabled && showExtras && (
+        <div
+          className="text-sm flex flex-col items-center space-y-2 p-2 border border-green-600 rounded-md bg-green-600/10 w-full max-w-full sm:max-w-xs overflow-hidden"
+          data-testid="success-message"
+        >
+          <div className="flex items-center space-x-1 text-green-700 dark:text-green-400 w-full">
+            <CheckCircle className="h-4 w-4 flex-shrink-0" />
+            <span className="truncate flex-1" title={fileName ?? undefined}>
+              &quot;{fileName}&quot; carregado!
+            </span>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleButtonClick}
-              className="ml-auto text-destructive hover:bg-destructive/20 h-auto p-1 flex-shrink-0"
-              title="Tentar novamente"
-              data-testid="retry-button"
+              className="text-primary hover:bg-primary/10 h-auto p-1 flex-shrink-0"
+              title="Substituir arquivo"
+              data-testid="replace-button"
             >
-              <span className="sr-only">Tentar Novamente</span>
               <Replace className="h-4 w-4" />
             </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClearData}
+              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-auto p-1 flex-shrink-0"
+              title="Limpar dados carregados"
+              data-testid="clear-button"
+            >
+              <XCircle className="h-4 w-4" />
+            </Button>
           </div>
-        )}
-
-      {/* Display Success + Clear Button */}
-      {vaultData &&
-        !error &&
-        !isDisabled && ( // Show success only if data loaded, no error, and not loading/analyzing
-          <div
-            className="text-sm flex flex-col items-center space-y-2 p-2 border border-green-600 rounded-md bg-green-600/10 w-full max-w-full sm:max-w-xs overflow-hidden"
-            data-testid="success-message"
-          >
-            <div className="flex items-center space-x-1 text-green-700 dark:text-green-400 w-full">
-              <CheckCircle className="h-4 w-4 flex-shrink-0" />
-              <span className="truncate flex-1" title={fileName ?? undefined}>
-                &quot;{fileName}&quot; carregado!
-              </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleButtonClick}
-                className="text-primary hover:bg-primary/10 h-auto p-1 flex-shrink-0"
-                title="Substituir arquivo"
-                data-testid="replace-button"
-              >
-                <Replace className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleClearData}
-                className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-auto p-1 flex-shrink-0"
-                title="Limpar dados carregados"
-                data-testid="clear-button"
-              >
-                <XCircle className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

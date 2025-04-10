@@ -1,0 +1,25 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true,
+      "decorators": true
+    },
+    "transform": {
+      "legacyDecorator": true,
+      "decoratorMetadata": true
+    },
+    "target": "es2022",
+    "keepClassNames": true,
+    "loose": false
+  },
+  "module": {
+    "type": "es6",
+    "noInterop": false,
+    "strictMode": true,
+    "strict": true,
+    "lazy": false,
+    "ignoreDynamic": false,
+    "importAssertions": true
+  }
+}
