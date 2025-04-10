@@ -125,7 +125,7 @@ Contribuições são bem-vindas! Siga os passos abaixo para contribuir:
 
 Se tiver dúvidas ou sugestões, entre em contato:
 
-- **Email**: contato@vaultanalyzer.com
+- **Email**: bernardo.gomes@bebitterbebetter.com.br
 - **GitHub Issues**: [Issues](https://github.com/bernardopg/vault_analyzer/issues)
 
 ## 📄 Licença
